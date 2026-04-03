@@ -1,0 +1,80 @@
+informe.pdf (formato IEEE a una columna), con la especificación del
+proyecto, incluyendo introducción, problema detectado (u oportunidad de
+innovación), solución propuesta y diseños (ESTE ES EL INFORME A
+ENTREGAR- máximo 6 páginas)
+
+usar template de latex
+
+https://drive.google.com/file/d/1YFap6OpK5KrHBlAZWWmlg8Bpt4ud4mBc/vi
+ew?usp=drive_link
+
+En fecha de entrega, un representante del grupo enviará un email a
+
+luis.veasc@inf.uach.cl, este email debe tener el siguiente formato:
+
+○ Asunto : “sistemas distribuido - entregable X”,
+
+○ Cuerpo: url del proyecto github, grupo y lista de integrantes.
+
+● La máxima hora de entrega para cada una de las iteraciones de este trabajo es a las
+23:59hrs de la fecha señalada por iteración.
+
+
+Diseños que debe considerar:
+● Debe presentar el diagrama de arquitectura basada en componentes de su solución,
+ejemplo: puede utilizar el diagrama UML de componentes de software o cualquier
+diagrama de arquitectura que muestre el diseño de su solución
+
+● Lista con los componentes de su solución y su respectiva descripción respecto de su
+proyecto, si utiliza herramientas (componentes de software) existentes, debe señalar
+la versión a utilizar, ejemplo: si utiliza rabbitMQ para generar colas, debe indicar la
+versión y la forma de instalación.
+
+● Debe proponer el modelo físico (infraestructura de despliegue)
+
+● Debe proponer el modelo fundamental (visto en clase en la primera presentación)
+
+● Debe considerar que el lenguaje de programación a utilizar es python, versión 3.6
+hacia arriba
+
+● Si considera necesario el desarrollo de una base de datos, debe presentar el modelo
+relacional (si es una base de datos relacional) o la lista de objetos de la base de
+datos nosql. También, debe presentar un diccionario de datos (planilla tipo excel en
+un documento aparte).
+
+● Debe considerar que todo componente de software a desarrollar debe ser
+implementado con tecnología de container (salvo la db que debe estar directamente
+instalada sobre un servidor)
+
+● Debe considerar que en la tercera entrega (Iteración 3) se incorporará la
+comunicación codificada de los mensajes enviados entre componentes y/o
+protocolos que tengan directa relación con el funcionamiento del sistema
+implementado
+
+● Al informe agregue un listado de preguntas que realizaría al cliente que está
+solicitando esta solución (como mínimo 10 preguntas), con las cuales podría
+complementar mejor su desarrollo. Establezca los supuestos que contesten dichas
+preguntas para que puedan realizar su diseño. Ejemplo: ¿qué sistema operativo
+utiliza?, resp: linux bajo la distribución Centos 8, ¿con cuantos servidores cuentas y
+cuales son sus características? contamos con 2 servidores con 16 core, 32GB RAM,
+2TB de HDD.
+
+● Considere que la organización no cuenta con infinitos recursos, por ende, espera
+aprovechar sus recursos de la mejor manera posible. Si presenta una solución que
+consideré componentes y/o herramientas de pago (ejemplo: EC2 de AWS) debe
+presentar una presupuesto aproximado de los recursos a utilizar y los gastos que
+esto significa (mensualmente)
+
+● ¿Qué tipo de herramientas utilizarán en su propuesta: software libre, de pago,
+desarrolladas por usted o híbridas?. Justifique su decisión ¿por qué tomaron esa
+decisión?, ¿qué ventajas y desventajas conlleva?
+
+● Menciones bibliotecas o frameworks de python que deberá utilizar para implementar
+su solución y de una pequeña justificación de por qué debe utilizarlo, ejemplo:
+utilizaremos la biblioteca Flask para implementar la capa de servicios REST.
+
+● Si su solución contempla la incorporación de frontend, la implementación es libre,
+ejemplo: reactjs, vuejs, Angular, Flutter, etc.
+Recomendaciones de herramientas de software libre: nginx, traefik, docker, kubernetes,
+redis, memcached, NATs, RabbitMQ, Lucene, Solr, Elasticsearch, mongodb, mariadb,
+postgresql, Couchbase, apache kafka, kubeMQ, Confluent
