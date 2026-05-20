@@ -6,9 +6,34 @@ from sqlalchemy import text
 from models.postgres_connection import db_session
 
 
-AUDIOS_TABLE = 'public."AUDIOS"'
-BIRDS_TABLE = 'public."BIRDS"'
-LOG_SAMPLE_TABLE = "public.log_sample"
+TABLE_CANDIDATES = {
+    "audios": ('public."AUDIOS"', "public.audios"),
+    "birds": ('public."BIRDS"', "public.birds"),
+    "log_sample": ("public.log_sample",),
+}
+_TABLE_CACHE: dict[str, str] = {}
+
+
+def get_table_name(session, table_key: str) -> str:
+    """
+    Resuelve el nombre real de tabla para ambientes con nombres legacy en
+    mayuscula o esquemas locales en minuscula.
+    """
+    cached_table = _TABLE_CACHE.get(table_key)
+    if cached_table:
+        return cached_table
+
+    for table_name in TABLE_CANDIDATES[table_key]:
+        exists = session.execute(
+            text("select to_regclass(:table_name) is not null"),
+            {"table_name": table_name},
+        ).scalar_one()
+        if exists:
+            _TABLE_CACHE[table_key] = table_name
+            return table_name
+
+    candidates = ", ".join(TABLE_CANDIDATES[table_key])
+    raise RuntimeError(f"No se encontro tabla para {table_key}: {candidates}")
 
 
 def get_audio_by_id(audio_id: str) -> dict[str, Any] | None:
@@ -16,6 +41,7 @@ def get_audio_by_id(audio_id: str) -> dict[str, Any] | None:
     Busca un audio por id en la tabla audios.
     """
     with db_session() as session:
+        audios_table = get_table_name(session, "audios")
         result = session.execute(
             text(
                 f"""
@@ -29,7 +55,7 @@ def get_audio_by_id(audio_id: str) -> dict[str, Any] | None:
                     avg_frecuency,
                     file_extension,
                     location
-                from {AUDIOS_TABLE}
+                from {audios_table}
                 where id = :audio_id
                 """
             ),
@@ -74,10 +100,11 @@ def update_audio_analysis(
         return 0
 
     with db_session() as session:
+        audios_table = get_table_name(session, "audios")
         result = session.execute(
             text(
                 f"""
-                update {AUDIOS_TABLE}
+                update {audios_table}
                 set {", ".join(updates)}
                 where id = :audio_id
                 """
@@ -92,10 +119,11 @@ def create_bird_detection(audio_id: str, name: str) -> int:
     Inserta una especie detectada para un audio.
     """
     with db_session() as session:
+        birds_table = get_table_name(session, "birds")
         result = session.execute(
             text(
                 f"""
-                insert into {BIRDS_TABLE} (audio_id, name)
+                insert into {birds_table} (audio_id, name)
                 values (:audio_id, :name)
                 """
             ),
@@ -109,8 +137,9 @@ def delete_bird_detections(audio_id: str) -> int:
     Elimina detecciones previas de aves para un audio.
     """
     with db_session() as session:
+        birds_table = get_table_name(session, "birds")
         result = session.execute(
-            text(f"delete from {BIRDS_TABLE} where audio_id = :audio_id"),
+            text(f"delete from {birds_table} where audio_id = :audio_id"),
             {"audio_id": audio_id},
         )
         return result.rowcount
@@ -121,8 +150,9 @@ def replace_bird_detections(audio_id: str, names: list[str]) -> int:
     Reemplaza todas las aves detectadas de un audio.
     """
     with db_session() as session:
+        birds_table = get_table_name(session, "birds")
         deleted_result = session.execute(
-            text(f"delete from {BIRDS_TABLE} where audio_id = :audio_id"),
+            text(f"delete from {birds_table} where audio_id = :audio_id"),
             {"audio_id": audio_id},
         )
 
@@ -131,7 +161,7 @@ def replace_bird_detections(audio_id: str, names: list[str]) -> int:
             insert_result = session.execute(
                 text(
                     f"""
-                    insert into {BIRDS_TABLE} (audio_id, name)
+                    insert into {birds_table} (audio_id, name)
                     values (:audio_id, :name)
                     """
                 ),
@@ -147,11 +177,12 @@ def list_bird_detections(audio_id: str) -> list[dict[str, Any]]:
     Lista las aves detectadas para un audio.
     """
     with db_session() as session:
+        birds_table = get_table_name(session, "birds")
         result = session.execute(
             text(
                 f"""
                 select id, audio_id, name
-                from {BIRDS_TABLE}
+                from {birds_table}
                 where audio_id = :audio_id
                 order by id asc
                 """
@@ -177,10 +208,11 @@ def create_log_sample(
         payload = json.dumps(payload, ensure_ascii=False)
 
     with db_session() as session:
+        log_sample_table = get_table_name(session, "log_sample")
         result = session.execute(
             text(
                 f"""
-                insert into {LOG_SAMPLE_TABLE} (
+                insert into {log_sample_table} (
                     timestamp,
                     id_audio,
                     id_user,
@@ -217,6 +249,7 @@ def list_logs_by_audio_id(audio_id: str) -> list[dict[str, Any]]:
     Lista logs asociados a un audio.
     """
     with db_session() as session:
+        log_sample_table = get_table_name(session, "log_sample")
         result = session.execute(
             text(
                 f"""
@@ -229,7 +262,7 @@ def list_logs_by_audio_id(audio_id: str) -> list[dict[str, Any]]:
                     track,
                     payload,
                     error
-                from {LOG_SAMPLE_TABLE}
+                from {log_sample_table}
                 where id_audio = :audio_id
                 order by timestamp desc
                 """
