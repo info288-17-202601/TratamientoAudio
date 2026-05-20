@@ -6,6 +6,11 @@ from sqlalchemy import text
 from models.postgres_connection import db_session
 
 
+AUDIOS_TABLE = 'public."AUDIOS"'
+BIRDS_TABLE = 'public."BIRDS"'
+LOG_SAMPLE_TABLE = "public.log_sample"
+
+
 def get_audio_by_id(audio_id: str) -> dict[str, Any] | None:
     """
     Busca un audio por id en la tabla audios.
@@ -13,11 +18,18 @@ def get_audio_by_id(audio_id: str) -> dict[str, Any] | None:
     with db_session() as session:
         result = session.execute(
             text(
-                """
+                f"""
                 select
+                    id,
+                    id_device,
                     audio_file,
-                    file_extension
-                from audios
+                    audio_category,
+                    decibels,
+                    duration,
+                    avg_frecuency,
+                    file_extension,
+                    location
+                from {AUDIOS_TABLE}
                 where id = :audio_id
                 """
             ),
@@ -48,7 +60,7 @@ def update_audio_analysis(
         "audio_category": audio_category,
         "decibels": decibels,
         "duration": duration,
-        "avg_frequency": avg_frequency,
+        "avg_frecuency": avg_frequency,
         "file_extension": file_extension,
         "location": location,
     }
@@ -65,7 +77,7 @@ def update_audio_analysis(
         result = session.execute(
             text(
                 f"""
-                update audios
+                update {AUDIOS_TABLE}
                 set {", ".join(updates)}
                 where id = :audio_id
                 """
@@ -82,8 +94,8 @@ def create_bird_detection(audio_id: str, name: str) -> int:
     with db_session() as session:
         result = session.execute(
             text(
-                """
-                insert into birds (audio_id, name)
+                f"""
+                insert into {BIRDS_TABLE} (audio_id, name)
                 values (:audio_id, :name)
                 """
             ),
@@ -98,7 +110,7 @@ def delete_bird_detections(audio_id: str) -> int:
     """
     with db_session() as session:
         result = session.execute(
-            text("delete from birds where audio_id = :audio_id"),
+            text(f"delete from {BIRDS_TABLE} where audio_id = :audio_id"),
             {"audio_id": audio_id},
         )
         return result.rowcount
@@ -110,7 +122,7 @@ def replace_bird_detections(audio_id: str, names: list[str]) -> int:
     """
     with db_session() as session:
         deleted_result = session.execute(
-            text("delete from birds where audio_id = :audio_id"),
+            text(f"delete from {BIRDS_TABLE} where audio_id = :audio_id"),
             {"audio_id": audio_id},
         )
 
@@ -118,8 +130,8 @@ def replace_bird_detections(audio_id: str, names: list[str]) -> int:
         for name in names:
             insert_result = session.execute(
                 text(
-                    """
-                    insert into birds (audio_id, name)
+                    f"""
+                    insert into {BIRDS_TABLE} (audio_id, name)
                     values (:audio_id, :name)
                     """
                 ),
@@ -137,9 +149,9 @@ def list_bird_detections(audio_id: str) -> list[dict[str, Any]]:
     with db_session() as session:
         result = session.execute(
             text(
-                """
+                f"""
                 select id, audio_id, name
-                from birds
+                from {BIRDS_TABLE}
                 where audio_id = :audio_id
                 order by id asc
                 """
@@ -149,7 +161,10 @@ def list_bird_detections(audio_id: str) -> list[dict[str, Any]]:
         return [dict(row) for row in result.mappings().all()]
 
 
-def create_log_sample( *,id_audio: str | None = None, id_user: str | None = None, 
+def create_log_sample(
+    *,
+    id_audio: str | None = None,
+    id_user: str | None = None,
     id_device: str | None = None,
     track: int | None = None,
     payload: dict[str, Any] | str | None = None,
@@ -164,8 +179,8 @@ def create_log_sample( *,id_audio: str | None = None, id_user: str | None = None
     with db_session() as session:
         result = session.execute(
             text(
-                """
-                insert into log_sample (
+                f"""
+                insert into {LOG_SAMPLE_TABLE} (
                     timestamp,
                     id_audio,
                     id_user,
@@ -204,7 +219,7 @@ def list_logs_by_audio_id(audio_id: str) -> list[dict[str, Any]]:
     with db_session() as session:
         result = session.execute(
             text(
-                """
+                f"""
                 select
                     id,
                     timestamp,
@@ -214,7 +229,7 @@ def list_logs_by_audio_id(audio_id: str) -> list[dict[str, Any]]:
                     track,
                     payload,
                     error
-                from log_sample
+                from {LOG_SAMPLE_TABLE}
                 where id_audio = :audio_id
                 order by timestamp desc
                 """
