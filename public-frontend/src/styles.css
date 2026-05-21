@@ -1,0 +1,23 @@
+.leaflet-popup-content-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 1rem !important; /* Matches rounded-2xl */
+}
+
+/* 2. Limpiamos los márgenes forzados del contenedor interno */
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: inherit !important;
+}
+
+/* 3. Estilizada a la flechita de abajo del popup para que sea oscura */
+.leaflet-popup-tip {
+  background: #ffffff !important; /* Cambiado a blanco puro */
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4) !important; /* Sombra sutil para que despegue del mapa */
+}
+
+/* 4. Escondemos el botón de cerrar 'X' por defecto de Leaflet para un look ultra limpio */
+.leaflet-popup-close-button {
+  display: none !important;
+}

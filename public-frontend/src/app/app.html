@@ -1,0 +1,52 @@
+<div class="flex flex-col h-screen w-screen overflow-hidden bg-slate-100">
+    <!--Header-->
+  <header class="bg-zinc-600 text-white p-5 h-15 flex items-center justify-between shadow-md z-10">
+    <div class="flex items-center space-x-3">
+      <span class="text-2xl">🔊</span>
+      <h1 class="text-2xl font-bold tracking-wide text-slate-100">SoundColab</h1>
+    </div>
+    <span class="text-xs bg-emerald-600/30 text-emerald-400 border border-emerald-500/50 px-3 py-1 rounded-full font-medium tracking-wider uppercase">
+      Campus Miraflores
+    </span>
+  </header>
+  
+  <div class="flex flex-1 h-[calc(100vh-64px)] w-full">
+    <!--Sidebar-->
+
+    <aside class="w-81 bg-white border-r border-slate-200 p-6 flex flex-col justify-between shadow-sm z-10">
+      <div class="space-y-6">
+        <!--Checkbox mapa calor-->
+        <div>
+          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Capas de Visualización</h2>
+          <label class="flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 rounded-xl cursor-pointer transition-colors border border-slate-200/60">  
+            <div class="flex items-center space-x-3">
+              <span class="text-xl">🔥</span>
+              <span class="text-sm font-medium text-slate-700">Mapa de calor (Ruido)</span>
+            </div>
+            <input 
+              type="checkbox" 
+              [checked]="mostrarMapaRuido" 
+              (change)="toggleMapaRuido()"
+              class="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500">
+          </label>
+        </div>
+        
+        <div class="pt-41  border-t border-slate-100">
+          <p class="text-xs text-slate-400 italic">Los datos se actualizan de manera asíncrona desde el servidor central.</p>
+        </div>
+      </div>
+
+      <div class="text-2xl font-bold text-slate-200 tracking-tight select-none">
+        UACh Inf
+      </div>
+    </aside>
+
+    <!--Mapa-->
+    <main class="flex-1 p-6 bg-slate-50">
+      <div class="w-full h-full bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden relative">
+        <app-noise-map [capaActiva]="mostrarMapaRuido" class="h-full w-full block"> </app-noise-map>
+      </div>
+    </main>
+
+  </div>
+</div>
