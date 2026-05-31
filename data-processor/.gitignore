@@ -18,6 +18,7 @@ env/
 .env
 .env.*
 !.env.example
+!test/.env
 
 # Tool caches
 .mypy_cache/

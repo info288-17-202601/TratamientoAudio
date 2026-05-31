@@ -115,6 +115,58 @@ redis-cli LLEN audio_tasks
 
 Si `LLEN` devuelve `0` despues de enviar el mensaje, significa que el consumidor lo tomo desde Redis.
 
+## Ejecutar con Docker
+
+Construir y lanzar el contenedor:
+
+```bash
+cd data-processor
+./run-data-processor.sh
+```
+
+El script usa por defecto:
+
+- Imagen: `data-processor:local`.
+- Contenedor: `data-processor`.
+- Variables: `src/.env`.
+- Red: `host`.
+
+La red `host` permite que `REDIS_URL=redis://localhost:6379/0` apunte al Redis que corre en tu maquina.
+
+Tambien puedes sobrescribir esos valores:
+
+```bash
+IMAGE_NAME=data-processor:dev \
+CONTAINER_NAME=data-processor \
+ENV_FILE=src/.env \
+NETWORK_MODE=host \
+./run-data-processor.sh
+```
+
+Para usar una red Docker existente, revisa primero el nombre:
+
+```bash
+docker network ls
+```
+
+Luego lanza el contenedor indicando esa red:
+
+```bash
+NETWORK_MODE=mi-red-docker ./run-data-processor.sh
+```
+
+Si Redis tambien corre dentro de esa red Docker, en `src/.env` usa el nombre del contenedor Redis en vez de `localhost`. Por ejemplo, si el contenedor se llama `redis`:
+
+```env
+REDIS_URL=redis://redis:6379/0
+```
+
+Ver logs del contenedor:
+
+```bash
+docker logs -f data-processor
+```
+
 ## Tests
 
 Ejecutar toda la suite:
@@ -143,3 +195,41 @@ El test end-to-end con `queltehue.wav` se omite automaticamente si no hay conexi
 ```bash
 SUPABASE_DB_URL=postgresql://admin:admin123@localhost:5432/mi_bd pytest test/test_consumer.py
 ```
+
+### Tests con Docker
+
+Los tests de Docker leen variables desde `test/.env`. Puedes crearlo desde `test/.env.example`.
+
+Variables usadas:
+
+```env
+RUN_DOCKER_TESTS=1
+CONTAINER_NAME=data-processor
+DOCKER_ENV_FILE=src/.env
+DOCKER_NETWORK_MODE=host
+DOCKER_E2E_TIMEOUT_SECONDS=240
+```
+
+Para ejecutar los tests Docker:
+
+```bash
+cd data-processor
+pytest test/test_docker.py -q -rs
+```
+
+Estos tests validan:
+
+- Que la imagen Docker se construye correctamente.
+- Que el contenedor puede importar `consumer` y tiene `ffmpeg`.
+- Que el contenedor corriendo puede conectarse a Redis.
+- Que el contenedor corriendo consume un mensaje real, procesa `test/queltehue.wav` y actualiza Postgres.
+
+Para el test end-to-end de Docker, antes debes tener Redis y el contenedor `data-processor` corriendo:
+
+```bash
+docker start redis
+./run-data-processor.sh
+pytest test/test_docker.py -q -rs
+```
+
+Si el contenedor no esta corriendo, los tests que dependen de el se omiten automaticamente.
