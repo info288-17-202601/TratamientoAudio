@@ -13,7 +13,7 @@ El flujo esperado es:
 
 - Python 3.11 o superior.
 - Redis disponible en `REDIS_URL`.
-- Postgres disponible en `SUPABASE_DB_URL`, `DATABASE_URL` o `POSTGRES_URL`.
+- Postgres disponible en `SUPABASE_DB_URL`, `DATABASE_URL`, `POSTGRES_URL` o variables separadas de Supabase.
 - `ffmpeg` instalado en el sistema.
 
 En Ubuntu/Debian:
@@ -60,6 +60,21 @@ POSTGRES_POOL_SIZE=5
 POSTGRES_MAX_OVERFLOW=10
 ```
 
+Ejemplo con Supabase Pooler:
+
+```env
+REDIS_URL=redis://localhost:6379/0
+REDIS_QUEUE_NAME=audio_tasks
+REDIS_BLOCK_TIMEOUT_SECONDS=5
+LOG_LEVEL=INFO
+user=postgres.<project-ref>
+password=<password>
+host=aws-1-us-east-2.pooler.supabase.com
+port=5432
+dbname=postgres
+POSTGRES_SSLMODE=require
+```
+
 Variables disponibles:
 
 - `REDIS_URL`: URL de conexion a Redis.
@@ -67,8 +82,10 @@ Variables disponibles:
 - `REDIS_BLOCK_TIMEOUT_SECONDS`: timeout de espera en `BLPOP`.
 - `LOG_LEVEL`: nivel de logs.
 - `SUPABASE_DB_URL`, `DATABASE_URL` o `POSTGRES_URL`: URL de conexion a Postgres.
-- `POSTGRES_POOL_SIZE`: tamano del pool de conexiones.
-- `POSTGRES_MAX_OVERFLOW`: conexiones extra permitidas sobre el pool.
+- `user`, `password`, `host`, `port`, `dbname`: alternativa para configurar la conexion con los valores separados que entrega Supabase.
+- `POSTGRES_SSLMODE`: modo SSL usado cuando se construye la URL desde variables separadas. Por defecto: `require`.
+- `POSTGRES_POOL_SIZE`: tamano del pool de conexiones. No se usa con Supabase Pooler.
+- `POSTGRES_MAX_OVERFLOW`: conexiones extra permitidas sobre el pool. No se usa con Supabase Pooler.
 
 ## Ejecutar consumidor
 
