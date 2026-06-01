@@ -13,7 +13,11 @@ def create_app(config_name=None):
     app.config.from_object(get_config(config_name))
 
     db.init_app(app)
+
+
     cors.init_app(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}})
+
+    print(app.config["CORS_ORIGINS"])
 
     register_middlewares(app)
     register_error_handlers(app)
