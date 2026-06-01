@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { Audio } from '../models/audio.model';
 
 @Injectable({
@@ -6,34 +9,14 @@ import { Audio } from '../models/audio.model';
 })
 export class AudioService {
 
-  private audiosFicticios: Audio[] = [
-    {
-      id: 'audio-001',
-      latitud: -39.833383,
-      longitud: -73.243881,
-      decibeles: 75.2,
-      categoria: 'Persona'
-    },
-    {
-      id: 'audio-002',
-      latitud: -39.832366,
-      longitud: -73.243881,
-      decibeles: 35.5,
-      categoria: 'Animal',
-      tipo_ave: 'Chucao'
-    },
-    {
-      id: 'audio-003',
-      latitud: -39.8322212,
-      longitud: -73.252375,
-      decibeles: 65.8,
-      categoria: 'Auto'
-    }
-  ];
+  private apiUrl = `${import.meta.env.NG_APP_API_URL}/api/audios`;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getAudios(): Audio[] {
-    return this.audiosFicticios;
+  getAudios(): Observable<Audio[]> {  
+    return this.http.get<Audio[]>(this.apiUrl).pipe(
+      tap(audios => console.log(`✅ ${audios.length} audios recibidos:`, audios)),
+      catchError(err => { console.error('❌ Error al recibir audios:', err); throw err; })
+    );
   }
 }

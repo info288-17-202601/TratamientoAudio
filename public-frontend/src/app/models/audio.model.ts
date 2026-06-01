@@ -2,7 +2,7 @@ export interface Audio {
   id: string;
   latitud: number;
   longitud: number;
-  decibeles: number;
-  categoria: 'Persona' | 'Animal' | 'Auto'  ;
+  decibels: number;
+  categoria: string ;
   tipo_ave?: string;
 }
