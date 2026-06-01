@@ -138,24 +138,14 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Python cache/build artifacts
+
+# Caché de Python
 __pycache__/
 *.py[cod]
-*$py.class
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-*.egg-info/
 
-# Python virtual environments
-.venv/
-venv/
-env/
-.conda/
-
-# Local databases and installers
+# Base de datos
 *.db
-*.sqlite
+database.db
 
+# Documentos
+*.pdf
