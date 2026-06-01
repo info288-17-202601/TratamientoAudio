@@ -25,6 +25,9 @@ class BaseConfig:
     CORS_ORIGINS = getenv("CORS_ORIGINS", "*").split(",")
 
     JSON_SORT_KEYS = False
+    # Redis settings for enqueuing audio processing jobs
+    REDIS_URL = getenv("REDIS_URL", None)
+    REDIS_QUEUE = getenv("REDIS_QUEUE", "audio_jobs")
 
 
 class DevelopmentConfig(BaseConfig):

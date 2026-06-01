@@ -6,6 +6,33 @@ from webiste.app.models.device import Device
 from webiste.app.models.location import Location
 from webiste.app.models.user import User
 import os
+import json
+import redis
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load .env from project root (same approach used elsewhere)
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+load_dotenv(BASE_DIR / ".env")
+
+# Redis configuration (optional). If REDIS_URL is not provided, enqueue step is skipped.
+REDIS_URL = os.getenv("REDIS_URL")
+REDIS_QUEUE = os.getenv("REDIS_QUEUE", "audio_jobs")
+
+
+def enqueue_audio_job(redis_url: str, queue_name: str, audio_id: str):
+    """Try to enqueue a simple job {id_correlativo, audio_id} into Redis.
+
+    Returns the job message on success or a dict with 'error' on failure.
+    """
+    try:
+        r = redis.from_url(redis_url, decode_responses=True)
+        job_id = r.incr("audio_job_id_seq")
+        job_message = {"id_correlativo": job_id, "audio_id": audio_id}
+        r.lpush(queue_name, json.dumps(job_message))
+        return job_message
+    except Exception as e:
+        return {"error": str(e)}
 
 # Endpoint: /api/upload-audio
 
@@ -69,10 +96,23 @@ def upload_audio():
     db.session.add(audio)
     db.session.commit()
 
-    return success_response({
+    # Prepare response payload
+    response_payload = {
         "audio_id": str(audio.id),
         "device_id": str(device.id),
         "location_id": str(location.id) if location else None,
         "filename": audio_file.filename,
         "size_bytes": len(audio_data)
-    }, "Audio uploaded successfully", 201)
+    }
+
+    # Enqueue job to Redis if configured
+    enqueue_result = None
+    if REDIS_URL:
+        enqueue_result = enqueue_audio_job(REDIS_URL, REDIS_QUEUE, response_payload["audio_id"])
+
+    # Include enqueue info when applicable
+    result = {**response_payload}
+    if enqueue_result is not None:
+        result["enqueue"] = enqueue_result
+
+    return success_response(result, "Audio uploaded successfully", 201)
