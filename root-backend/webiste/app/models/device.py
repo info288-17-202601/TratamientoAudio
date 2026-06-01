@@ -13,7 +13,6 @@ class Device(db.Model):
 
     user = db.relationship("User", back_populates="devices")
     audios = db.relationship("Audio", back_populates="device")
-    logs = db.relationship("LogSample", back_populates="device")
 
     def to_dict(self):
         return {

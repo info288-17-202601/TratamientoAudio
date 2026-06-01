@@ -14,7 +14,6 @@ class User(db.Model):
 
     devices = db.relationship("Device", back_populates="user")
     logins = db.relationship("Login", back_populates="user")
-    logs = db.relationship("LogSample", back_populates="user")
 
     def to_dict(self):
         return {

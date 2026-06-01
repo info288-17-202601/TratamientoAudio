@@ -19,7 +19,6 @@ class Audio(db.Model):
     device = db.relationship("Device", back_populates="audios")
     location_ref = db.relationship("Location", back_populates="audios")
     birds = db.relationship("Bird", back_populates="audio")
-    logs = db.relationship("LogSample", back_populates="audio")
 
     def to_dict(self):
         return {
