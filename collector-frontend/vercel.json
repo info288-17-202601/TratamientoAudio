@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/collector-api/:path*",
+      "destination": "http://IP_PUBLICA_O_TUNNEL_DE_TU_PI:4000/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
