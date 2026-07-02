@@ -18,6 +18,8 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: tratamiento-audio-postgres
+    profiles:
+      - local-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -58,9 +60,8 @@ services:
       context: ./root-backend
     container_name: tratamiento-audio-root-backend
     restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
+    env_file:
+      - ./root-backend/.env
     environment:
       FLASK_ENV: ${FLASK_ENV}
       APP_HOST: ${APP_HOST}
@@ -82,8 +83,6 @@ services:
     container_name: tratamiento-audio-collector-api
     restart: unless-stopped
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
     environment:
@@ -114,8 +113,6 @@ services:
     container_name: tratamiento-audio-data-processor
     restart: unless-stopped
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
     environment:

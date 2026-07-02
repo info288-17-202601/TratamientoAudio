@@ -1,0 +1,55 @@
+/* Estilos heredados del app original */
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.user-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(216, 196, 242, 0.25) 0%, rgba(234, 220, 245, 0.35) 100%);
+  border: 1px solid rgba(170, 161, 200, 0.25);
+  border-radius: 14px;
+}
+
+.role-badge {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.15rem 0.55rem;
+  background: rgba(141, 97, 189, 0.15);
+  color: #6c4ba1;
+  font-size: 0.7rem;
+  font-weight: 800;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: #ffffff;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.logout-button:hover {
+  background: #fef2f2;
+  transform: translateY(-1px);
+}
+
+.logout-button:active {
+  transform: translateY(0);
+}
