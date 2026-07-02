@@ -6,7 +6,7 @@ from webiste.app.controllers.auth_controller import (
     logout,
     register,
 )
-from webiste.app.controllers.audios_controller import get_audio, list_audios
+from webiste.app.controllers.audios_controller import get_audio, list_audios, stream_audio
 from webiste.app.controllers.birds_controller import list_birds
 from webiste.app.controllers.diagnostics_controller import database_ping, ping
 from webiste.app.controllers.health_controller import health
@@ -30,4 +30,5 @@ api_bp.add_url_rule(
 # Datos de audio y aves (para el mapa de ruido del public-frontend)
 api_bp.add_url_rule("/audios", "list_audios", list_audios, methods=["GET"])
 api_bp.add_url_rule("/audios/<string:audio_id>", "get_audio", get_audio, methods=["GET"])
+api_bp.add_url_rule("/audios/<string:audio_id>/stream", "stream_audio", stream_audio, methods=["GET"])
 api_bp.add_url_rule("/birds", "list_birds", list_birds, methods=["GET"])

@@ -93,3 +93,107 @@
   transform: translateY(-2px) scale(1.04);
   transition: transform 140ms ease;
 }
+
+/* ── Reproductor compacto del popup del mapa ── */
+.popup-player {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #f4f5f9;
+  border: 1px solid rgba(200, 190, 230, 0.35);
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem 0.3rem 0.3rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pp-play {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #111e4d;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 150ms ease, transform 120ms ease;
+}
+
+.pp-play svg { width: 12px; height: 12px; }
+
+.pp-play:hover {
+  background: #8d61bd;
+  transform: scale(1.06);
+}
+
+.pp-time {
+  font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #111e4d;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pp-total { color: #94a3b8; font-weight: 500; }
+
+.pp-seek {
+  flex: 1;
+  min-width: 30px;
+  height: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #d8dbe8;
+  border-radius: 99px;
+  cursor: pointer;
+  accent-color: #8d61bd;
+}
+
+.pp-seek::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #111e4d;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(17, 30, 77, 0.3);
+  cursor: pointer;
+}
+
+.pp-seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #111e4d;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(17, 30, 77, 0.3);
+  cursor: pointer;
+}
+
+.pp-mute {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.pp-mute svg { width: 14px; height: 14px; }
+
+.pp-mute:hover {
+  color: #111e4d;
+  background: rgba(141, 97, 189, 0.12);
+}

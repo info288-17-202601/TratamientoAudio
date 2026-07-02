@@ -16,12 +16,16 @@ export class AudioService {
   getAudios(): Observable<Audio[]> {
     return this.http.get<any>(this.apiUrl).pipe(
       map(respuesta => respuesta.data.map((item: any): Audio => ({
-        id:        item.audio_id,
-        latitud:   item.latitud,
-        longitud:  item.longitud,
-        decibels:  item.decibels,
-        categoria: item.audio_category,
-        tipo_ave:  item.bird_name ?? undefined
+        id:             item.audio_id,
+        latitud:        item.latitud,
+        longitud:       item.longitud,
+        decibels:       item.decibels,
+        categoria:      item.audio_category,
+        tipo_ave:       item.bird_name ?? undefined,
+        audioStreamUrl: `${this.apiUrl}/${item.audio_id}/stream`,
+        duration:       item.duration ?? undefined,
+        weather:        item.weather ?? undefined,
+        createdAt:      item.created_at ?? undefined,
       }))),
       tap(audios => console.log(`✅ ${audios.length} audios recibidos:`, audios)),
       catchError(err => { console.error('❌ Error al recibir audios:', err); throw err; })

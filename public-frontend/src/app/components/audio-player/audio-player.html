@@ -1,0 +1,34 @@
+<div class="player-pill">
+
+  <audio #audioEl preload="none" [src]="src"
+    (play)="playing.set(true)"
+    (pause)="playing.set(false)"
+    (timeupdate)="onTimeUpdate()"
+    (loadedmetadata)="onLoadedMetadata()"
+    (ended)="onEnded()">
+  </audio>
+
+  <button class="play-btn" (click)="toggle()" [attr.aria-label]="playing() ? 'Pausar' : 'Reproducir'">
+    @if (playing()) {
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+    } @else {
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 001.54.84l10-6.5a1 1 0 000-1.68l-10-6.5A1 1 0 008 5.5z"/></svg>
+    }
+  </button>
+
+  <span class="time">
+    {{ format(currentTime()) }} <span class="time-total">/ {{ format(duration()) }}</span>
+  </span>
+
+  <input class="seek" type="range" min="0" [max]="duration() || 0" step="0.1"
+    [value]="currentTime()" (input)="seek($event)" aria-label="Posición del audio">
+
+  <button class="mute-btn" (click)="toggleMute()" [attr.aria-label]="muted() ? 'Activar sonido' : 'Silenciar'">
+    @if (muted()) {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    } @else {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
+    }
+  </button>
+
+</div>

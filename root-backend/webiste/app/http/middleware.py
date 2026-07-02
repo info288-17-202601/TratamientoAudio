@@ -14,6 +14,8 @@ PUBLIC_ENDPOINTS = {
     "api.auth_login",
     "api.auth_register",
     "api.auth_forgot_password",
+    "api.list_audios",
+    "api.stream_audio",
 }
 
 

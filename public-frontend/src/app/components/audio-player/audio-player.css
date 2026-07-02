@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.player-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #f4f5f9;
+  border: 1px solid rgba(200, 190, 230, 0.35);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem 0.35rem 0.4rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.play-btn {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: #111e4d;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 120ms ease, background 150ms ease;
+}
+
+.play-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.play-btn:hover {
+  background: #8d61bd;
+  transform: scale(1.06);
+}
+
+.time {
+  font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #111e4d;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.time-total {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.seek {
+  flex: 1;
+  min-width: 40px;
+  height: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #d8dbe8;
+  border-radius: 99px;
+  cursor: pointer;
+  accent-color: #8d61bd;
+}
+
+.seek::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #111e4d;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(17, 30, 77, 0.3);
+  cursor: pointer;
+}
+
+.seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #111e4d;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(17, 30, 77, 0.3);
+  cursor: pointer;
+}
+
+.mute-btn {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.mute-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.mute-btn:hover {
+  color: #111e4d;
+  background: rgba(141, 97, 189, 0.12);
+}

@@ -51,11 +51,18 @@ export class NoiseMapComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = L.map('mapa-ruido-uach', {
       zoom: 17,
       center: L.latLng(-39.833464, -73.246310),
-      fadeAnimation: true
+      fadeAnimation: true,
+      minZoom: 4,
+      maxZoom: 19,
+      // Evita arrastrar el mapa fuera de los bordes del planeta
+      maxBounds: L.latLngBounds(L.latLng(-85, -180), L.latLng(85, 180)),
+      maxBoundsViscosity: 1.0,
     });
 
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 19,
+      noWrap: true,
+      bounds: [[-85, -180], [85, 180]],
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
     }).addTo(this.map);
 
