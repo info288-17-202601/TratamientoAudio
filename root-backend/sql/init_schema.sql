@@ -4,10 +4,19 @@ CREATE TABLE IF NOT EXISTS public."USER" (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   name character varying NOT NULL,
   username character varying NOT NULL UNIQUE,
-  password character varying NOT NULL,
-  role character varying NOT NULL,
+  email character varying UNIQUE,
+  password character varying,
+  role character varying NOT NULL DEFAULT 'user',
+  supabase_user_id character varying UNIQUE,
   CONSTRAINT "USER_pkey" PRIMARY KEY (id)
 );
+
+-- Migración idempotente para bases ya creadas
+ALTER TABLE public."USER" ADD COLUMN IF NOT EXISTS email character varying UNIQUE;
+ALTER TABLE public."USER" ADD COLUMN IF NOT EXISTS password character varying;
+ALTER TABLE public."USER" ADD COLUMN IF NOT EXISTS supabase_user_id character varying UNIQUE;
+ALTER TABLE public."USER" ALTER COLUMN password DROP NOT NULL;
+ALTER TABLE public."USER" ALTER COLUMN role SET DEFAULT 'user';
 
 CREATE TABLE IF NOT EXISTS public."LOCATIONS" (
   id uuid NOT NULL DEFAULT gen_random_uuid(),

@@ -12,6 +12,8 @@ PUBLIC_ENDPOINTS = {
     "api.ping",
     "api.database_ping",
     "api.auth_login",
+    "api.auth_register",
+    "api.auth_forgot_password",
 }
 
 

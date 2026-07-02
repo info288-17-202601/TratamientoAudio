@@ -5,6 +5,7 @@ from webiste.app.commands import register_commands
 from webiste.app.exceptions.handlers import register_error_handlers
 from webiste.app.extensions import cors, db
 from webiste.app.http.middleware import register_middlewares
+from webiste.app.services.supabase_service import get_supabase_service
 from webiste.routes import register_routes
 
 
@@ -14,6 +15,9 @@ def create_app(config_name=None):
 
     db.init_app(app)
 
+    # Inicializa el cliente de Supabase como atributo del app para que
+    # los controllers lo obtengan con current_app.supabase.
+    app.supabase = get_supabase_service(app)
 
     cors.init_app(app, resources={r"/api/*": {"origins": app.config["CORS_ORIGINS"]}})
 

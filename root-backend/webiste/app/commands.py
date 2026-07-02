@@ -51,6 +51,8 @@ def init_sql_command():
 @click.command("seed-db")
 @with_appcontext
 def seed_db_command():
+    from flask import current_app
+
     from webiste.app.models.audio import Audio
     from webiste.app.models.bird import Bird
     from webiste.app.models.device import Device
@@ -61,8 +63,45 @@ def seed_db_command():
     db.drop_all()
     db.create_all()
 
-    # Usuario de prueba
-    user = User(name="Admin SoundColab", username="admin", password="admin123", role="admin")
+    # Intentar crear el admin también en Supabase Auth (best effort)
+    supabase_user_id = None
+    supabase = getattr(current_app, "supabase", None)
+    if supabase and current_app.config.get("SUPABASE_URL") and (
+        current_app.config.get("SUPABASE_SERVICE_ROLE_KEY")
+        or current_app.config.get("SUPABASE_KEY")
+    ):
+        try:
+            data = {"name": "Admin SoundColab", "username": "admin", "role": "admin"}
+            if supabase.has_admin_credentials:
+                response = supabase.create_user(
+                    email="admin@soundcolab.local",
+                    password="admin123",
+                    data=data,
+                )
+            else:
+                response = supabase.sign_up(
+                    email="admin@soundcolab.local",
+                    password="admin123",
+                    data=data,
+                )
+            supabase_user = getattr(response, "user", None)
+            if supabase_user is not None:
+                supabase_user_id = getattr(supabase_user, "id", None)
+                click.echo(f"  - Usuario admin creado en Supabase (id={supabase_user_id})")
+            else:
+                click.echo("  - Supabase no devolvio usuario (posible confirmacion de email requerida)")
+        except Exception as exc:  # noqa: BLE001
+            click.echo(f"  - Aviso: no se pudo crear el admin en Supabase: {exc}")
+
+    # Usuario de prueba (espejo local)
+    user = User(
+        name="Admin SoundColab",
+        username="admin",
+        email="admin@soundcolab.local",
+        password=None,
+        role="admin",
+        supabase_user_id=supabase_user_id,
+    )
     db.session.add(user)
     db.session.flush()
 
@@ -121,7 +160,7 @@ def seed_db_command():
 
     db.session.commit()
     click.echo("Seed completado:")
-    click.echo(f"  - 1 usuario  (username: admin / password: admin123)")
+    click.echo(f"  - 1 usuario  (email: admin@soundcolab.local / password: admin123)")
     click.echo(f"  - 3 ubicaciones en Valdivia")
     click.echo(f"  - 1 dispositivo")
     click.echo(f"  - {len(audios)} audios ({sum(1 for a in audio_seed if a[0]=='bird')} bird, 1 traffic, 1 silence)")

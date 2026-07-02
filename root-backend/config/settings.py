@@ -36,7 +36,10 @@ class BaseConfig:
     )
 
     SUPABASE_URL = getenv("SUPABASE_URL")
-    SUPABASE_KEY = getenv("SUPABASE_KEY")
+    SUPABASE_KEY = getenv("SUPABASE_KEY") or getenv("SUPABASE_PUBLISHABLE_KEY")
+    SUPABASE_SERVICE_ROLE_KEY = getenv("SUPABASE_SERVICE_ROLE_KEY") or getenv(
+        "SUPABASE_SECRET_KEY"
+    )
 
     JWT_SECRET_KEY = getenv("JWT_SECRET_KEY", "change-me-jwt")
     JWT_EXPIRATION_HOURS = int(getenv("JWT_EXPIRATION_HOURS", "24"))
@@ -57,6 +60,7 @@ class TestingConfig(BaseConfig):
     TESTING = True
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = getenv("TEST_DATABASE_URL", "sqlite:///:memory:")
+    SQLALCHEMY_ENGINE_OPTIONS = {}
 
 
 class ProductionConfig(BaseConfig):
