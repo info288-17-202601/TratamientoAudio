@@ -58,7 +58,9 @@ services:
   root-backend:
     build:
       context: ./root-backend
-    container_name: tratamiento-audio-root-backend
+    # Sin container_name: nombres fijos no permiten replicas
+    deploy:
+      replicas: 3
     restart: unless-stopped
     env_file:
       - ./root-backend/.env
@@ -80,7 +82,8 @@ services:
   collector-api:
     build:
       context: ./collector-api
-    container_name: tratamiento-audio-collector-api
+    deploy:
+      replicas: 3
     restart: unless-stopped
     depends_on:
       redis:
