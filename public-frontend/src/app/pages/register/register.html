@@ -51,14 +51,6 @@
         />
       </label>
 
-      <label class="auth-field">
-        <span>Rol</span>
-        <select formControlName="role">
-          <option value="user">Usuario</option>
-          <option value="admin">Administrador</option>
-        </select>
-      </label>
-
       @if (errorMessage()) {
         <div class="auth-error" role="alert">
           {{ errorMessage() }}

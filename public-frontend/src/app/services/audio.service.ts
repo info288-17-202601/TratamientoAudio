@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Audio } from '../models/audio.model';
 import { AuthService } from './auth.service';
 
@@ -36,7 +36,6 @@ export class AudioService {
         weather:        item.weather ?? undefined,
         createdAt:      item.created_at ?? undefined,
       }))),
-      tap(audios => console.log(`✅ ${audios.length} audios recibidos:`, audios)),
       catchError(err => { console.error('❌ Error al recibir audios:', err); throw err; })
     );
   }

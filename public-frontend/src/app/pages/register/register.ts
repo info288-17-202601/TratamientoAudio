@@ -28,7 +28,6 @@ export class RegisterComponent {
     ],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    role: ['user'],
   });
 
   submit(): void {
@@ -44,7 +43,6 @@ export class RegisterComponent {
       username: string;
       email: string;
       password: string;
-      role: string;
     };
 
     this.auth.register(v).subscribe({

@@ -122,7 +122,9 @@ def register():
     password = payload.get("password") or ""
     name = (payload.get("name") or "").strip()
     username = (payload.get("username") or "").strip().lower()
-    role = (payload.get("role") or "user").strip().lower()
+    # El rol siempre es "user" en el registro publico; los admin se
+    # crean por seed o directamente en la base de datos.
+    role = "user"
 
     if not email or not password:
         return error_response("email y password son requeridos", 422)
