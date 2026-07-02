@@ -5,6 +5,7 @@ from .location import Location
 from .log_sample import LogSample
 from .login import Login
 from .user import User
+from .user_log import UserLog
 
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     "LogSample",
     "Login",
     "User",
+    "UserLog",
 ]

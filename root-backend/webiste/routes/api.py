@@ -10,6 +10,7 @@ from webiste.app.controllers.audios_controller import get_audio, list_audios, st
 from webiste.app.controllers.birds_controller import list_birds
 from webiste.app.controllers.diagnostics_controller import database_ping, ping
 from webiste.app.controllers.health_controller import health
+from webiste.app.controllers.logs_controller import list_logs
 
 
 api_bp = Blueprint("api", __name__)
@@ -32,3 +33,6 @@ api_bp.add_url_rule("/audios", "list_audios", list_audios, methods=["GET"])
 api_bp.add_url_rule("/audios/<string:audio_id>", "get_audio", get_audio, methods=["GET"])
 api_bp.add_url_rule("/audios/<string:audio_id>/stream", "stream_audio", stream_audio, methods=["GET"])
 api_bp.add_url_rule("/birds", "list_birds", list_birds, methods=["GET"])
+
+# Historial de acciones de usuarios (requiere token en produccion)
+api_bp.add_url_rule("/logs", "list_logs", list_logs, methods=["GET"])

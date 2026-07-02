@@ -69,6 +69,22 @@ CREATE TABLE IF NOT EXISTS public."LOGIN" (
   CONSTRAINT "LOGIN_id_user_fkey" FOREIGN KEY (id_user) REFERENCES public."USER"(id)
 );
 
+CREATE TABLE IF NOT EXISTS public."USER_LOGS" (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  id_user uuid,
+  username character varying,
+  action character varying NOT NULL,
+  method character varying NOT NULL,
+  path character varying NOT NULL,
+  status_code integer,
+  ip character varying,
+  user_agent character varying,
+  detail text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT "USER_LOGS_pkey" PRIMARY KEY (id),
+  CONSTRAINT "USER_LOGS_id_user_fkey" FOREIGN KEY (id_user) REFERENCES public."USER"(id)
+);
+
 CREATE TABLE IF NOT EXISTS public.log_sample (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   timestamp timestamp with time zone NOT NULL DEFAULT now(),
